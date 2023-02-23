@@ -19,8 +19,7 @@ import {
 import image from '../../images/image1.jpg';
 
 const BASE_URL = 'https://image.tmdb.org/t/p/w500';
-const ProfilePoster = posterLink =>
-  posterLink ? BASE_URL + posterLink : image;
+const ProfilePoster = poster => (poster ? BASE_URL + poster : image);
 
 const MovieDetails = () => {
   const { movieId } = useParams();
@@ -38,7 +37,7 @@ const MovieDetails = () => {
 
   const { vote_average, title, overview, genres, poster_path, release_date } =
     movieInfo;
-  const posterLink = BASE_URL + poster_path;
+  // const posterLink = BASE_URL + poster_path;
   const userScore = parseInt(vote_average * 10);
   const genresInfo = genres.map(el => el.name).join(', ');
   const releaseYear = release_date.split('-')[0];

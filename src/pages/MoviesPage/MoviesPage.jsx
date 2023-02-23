@@ -9,38 +9,29 @@ import { Sections } from 'pages/HomePage/HomePage.styled';
 
 const Movies = () => {
   const [movies, setMovies] = useState([]);
-  const [searchParams, setSearchParams] = useSearchParams();
+  const [searchParams] = useSearchParams();
+
   const location = useLocation();
   const searchQuery = searchParams.get('search');
 
   useEffect(() => {
-    const fetchMoviesBySearch = async () => {
-      const data = await loadMovieOnSearch(searchQuery)
-        .then(data => {
-          if (data.length === 0) {
-            toast.warn(`No result by "${searchQuery}." Try something else`);
-          }
-          return data;
-        })
-        .catch(error => console.log(error));
-      setMovies(data);
-    };
-    if (searchQuery) {
-      fetchMoviesBySearch();
-    }
+    if (!searchQuery) return;
+    loadMovieOnSearch(searchQuery)
+      .then(data => {
+        if (data.length === 0) {
+          toast.warn(`No result by "${searchQuery}." Try something else`);
+        }
+        setMovies(data);
+      })
+      .catch(error => console.log(error));
+
+    loadMovieOnSearch();
   }, [searchQuery]);
 
-  const submitSearch = search => {
-    if (search.trim('') === '') {
-      toast.info('Enter your search data 💖');
-      return;
-    }
-    setSearchParams({ search });
-  };
   return (
     <Sections>
       <ToastContainer />
-      <SearchBar onSubmit={submitSearch} />
+      <SearchBar />
       {movies && <MoviesList movies={movies} state={{ from: location }} />}
     </Sections>
   );

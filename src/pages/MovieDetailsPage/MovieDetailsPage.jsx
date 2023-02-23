@@ -16,11 +16,15 @@ import {
   TitleDetails,
 } from './MovieDetailsPage.styled';
 
+import image from '../../images/image1.jpg';
+
 const BASE_URL = 'https://image.tmdb.org/t/p/w500';
+const ProfilePoster = posterLink =>
+  posterLink ? BASE_URL + posterLink : image;
 
 const MovieDetails = () => {
   const { movieId } = useParams();
-  const [movieInfo, setMovieInfo] = useState({});
+  const [movieInfo, setMovieInfo] = useState(null);
   const location = useLocation();
   const backLink = location?.state?.from ?? '/';
 
@@ -28,7 +32,7 @@ const MovieDetails = () => {
     loadFullInfoMovie(movieId).then(setMovieInfo);
   }, [movieId]);
 
-  if (Object.keys(movieInfo).length === 0) {
+  if (!movieInfo) {
     return null;
   }
 
@@ -45,7 +49,7 @@ const MovieDetails = () => {
         <SectionWrapper>
           <ButtonLink to={backLink}>Go Back</ButtonLink>
           <MovieWrapper>
-            <Img src={posterLink} alt={`${title} poster`} />
+            <Img src={ProfilePoster(poster_path)} alt={`${title} poster`} />
             <AdditionalWrapper>
               <DetailsWrapper>
                 <TitleDetails>
